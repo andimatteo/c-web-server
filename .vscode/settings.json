@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.ejs": "html",
+        "file_cache.h": "c",
+        "in.h": "c",
+        "worker_process.h": "c",
+        "thread_pool.h": "c",
+        "request_parser.h": "c",
+        "http_response.h": "c",
+        "unistd.h": "c"
+    }
+}
