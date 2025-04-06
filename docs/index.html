@@ -1,12 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Benvenuto!</title>
+  <meta charset="UTF-8" />
+  <title>My C MPM-Style HTTP Server</title>
+  <!-- Bootstrap 5 via CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <style>
+    /* Additional simple styling (optional) */
+    body {
+      background: #f8f9fa;
+    }
+    pre, code {
+      background: #e9ecef;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Homepage del nostro Web Server in C</h1>
-    <p>Complimenti! Stai leggendo un file statico servito dal nostro server.</p>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">C Web Server</span>
+    </div>
+  </nav>
+
+  <section class="container py-5">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <h1 class="display-5 fw-bold mb-4">Pure C WEB-server</h1>
+        <p class="lead">
+          This is a lightweight HTTP/1.1 server written in pure C, inspired by the
+          Apache MPM worker design (multi-process, multi-thread pool). It supports
+          basic request parsing, file serving, keep-alive connections, and more.
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- HTTP Endpoints -->
+        <h2 class="mb-3">Endpoints &amp; File Serving</h2>
+        <p>
+          This server serves files from the <code>docs/</code> directory by default.
+          For example, if you have a file named <code>about.html</code> in <code>docs/</code>,
+          it will be accessible at:
+        </p>
+        <pre><code>GET /about.html  =>  docs/about.html</code></pre>
+        <p>
+          The default page <code>/</code> maps to <code>docs/index.html</code>.  
+          If a file is not found, the server responds with <code>404 Not Found</code>.
+        </p>
+
+        <div class="alert alert-info" role="alert">
+          <strong>Tip:</strong> You can place any static files (HTML, CSS, JS, images)
+          in <code>docs/</code> and reference them via <code>http://localhost:8080/filename</code>.
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- Keep-Alive -->
+        <h2 class="mb-3">HTTP Keep-Alive</h2>
+        <p>
+          The server supports basic HTTP/1.1 keep-alive. This means multiple requests
+          can be handled on the same TCP connection if the client includes an
+          appropriate <code>Connection: keep-alive</code> header (or uses HTTP/1.1 defaults).
+          In case a timeout is reached or <code>Connection: close</code> is used, the
+          server will terminate the connection.
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- Zero-Copy -->
+        <h2 class="mb-3">Zero-Copy (sendfile)</h2>
+        <p>
+          By using the <code>--zerocopy</code> or <code>-z</code> command-line flag,
+          the server attempts to transfer files using
+          <code>sendfile</code>, reducing CPU overhead (on both Linux and macOS).
+          Beware that partial sends require special handling on macOS, so make sure
+          your code includes a loop around sendfile calls if you modify this feature.
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- Performance Logging -->
+        <h2 class="mb-3">Performance Log</h2>
+        <p>
+          The server automatically writes performance data to
+          <code>performance.log</code> in the same directory from which it was launched.
+          Each request is logged with the file path, size, and the time taken to serve it.
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- Thread Pool & Worker Processes -->
+        <h2 class="mb-3">Worker Processes &amp; Thread Pool</h2>
+        <p>
+          The server creates multiple worker processes (like Apache’s MPM Worker).
+          Each worker uses an <em>event loop</em> (epoll/kqueue) for incoming connections
+          and dispatches the accepted sockets to a thread pool.
+        </p>
+        <p>
+          The default values are:
+        </p>
+        <ul>
+          <li><strong>NUM_WORKERS:</strong> 2</li>
+          <li><strong>NUM_THREADS_PER_WORKER:</strong> 4</li>
+        </ul>
+        <p>
+          You can customize these values in the source code (in <code>main.c</code>
+          or relevant headers).
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- Example Commands -->
+        <h2 class="mb-3">Example Commands</h2>
+        <p><em>Some common ways to run the server:</em></p>
+        <pre><code># Start on port 8080 (default), verbose mode
+./server --verbose
+
+# Start on port 9090, zero-copy mode
+./server 9090 --zerocopy
+
+# Both zero-copy & verbose mode on port 8000
+./server 8000 -z -v
+</code></pre>
+
+        <hr class="my-4" />
+
+        <!-- Contributing / Contact -->
+        <h2 class="mb-3">Contributing &amp; Contact</h2>
+        <p>
+          If you have ideas to improve this project—like better request parsing,
+          TLS support, or advanced logging—feel free to open a pull request in
+          our repository or reach out to the maintainer. This server is primarily
+          a teaching/demo project, so minimalism is prioritized over full HTTP spec coverage.
+        </p>
+
+        <hr class="my-4" />
+
+        <footer class="text-muted">
+          <p class="small">
+            C MPM-Style HTTP Server &mdash; 
+            <strong>Andrea Di Matteo</strong>
+          </p>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS (optional for some components) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

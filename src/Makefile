@@ -5,9 +5,9 @@ BIN_DIR = ..
 OBJ = main.o server.o worker_process.o thread_pool.o request_parser.o http_response.o \
       event_loop.o file_cache.o performance_log.o
 
-all: $(BIN_DIR)/server_mpm
+all: $(BIN_DIR)/server
 
-$(BIN_DIR)/server_mpm: $(OBJ)
+$(BIN_DIR)/server: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
 main.o: main.c server.h worker_process.h thread_pool.h file_cache.h performance_log.h
@@ -21,4 +21,4 @@ file_cache.o: file_cache.c file_cache.h
 performance_log.o: performance_log.c performance_log.h
 
 clean:
-	rm -f *.o $(BIN_DIR)/server_mpm $(BIN_DIR)/performance.log
+	rm -f *.o $(BIN_DIR)/server $(BIN_DIR)/performance.log
